@@ -1,0 +1,69 @@
+# ARS Protocol — CI validation
+# Validates any data/*.jsonl against schemas and syntax-checks all Python files.
+
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10+
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install jsonschema
+
+      - name: Syntax-check all Python files
+        run: |
+          set -e
+          # Compile every .py file; fail on syntax error
+          find . -name "*.py" -not -path "./.git/*" | while read -r f; do
+            python -m py_compile "$f" && echo "OK: $f"
+          done
+
+      - name: Validate data files (if present)
+        run: |
+          # Check if data/responses.jsonl and data/annotations.jsonl exist
+          if [ ! -f data/responses.jsonl ] || [ ! -f data/annotations.jsonl ]; then
+            echo "::notice::Data files not present; skipping dataset validation."
+            echo "This is expected before the first collection wave."
+            exit 0
+          fi
+          python validation/validate.py \
+            --responses data/responses.jsonl \
+            --annotations data/annotations.jsonl \
+            --strict
+
+      - name: Validate question registry (if present)
+        run: |
+          if [ ! -f questions/questions-active.yaml ]; then
+            echo "::notice::Active question registry not present; skipping."
+            exit 0
+          fi
+          python -c "
+          import json, yaml, jsonschema
+          schema = json.load(open('questions/questions.schema.json'))
+          records = yaml.safe_load(open('questions/questions-active.yaml'))
+          errors = 0
+          for r in records:
+              try:
+                  jsonschema.validate(r, schema)
+              except jsonschema.ValidationError as e:
+                  print(f'INVALID: {r.get(\"question_id\",\"?\")} - {e.message}')
+                  errors += 1
+          print(f'{len(records)} records checked, {errors} errors')
+          exit(1 if errors else 0)
+          "

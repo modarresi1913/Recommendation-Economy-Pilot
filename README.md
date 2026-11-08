@@ -131,6 +131,30 @@ The validator enforces 5 error classes (E1–E5) and 3 warning classes (W1–W3)
 
 ---
 
+## Pipeline
+
+The execution order is strict. **Pre-registration must precede the first wave; reliability gates must precede publication of figures.**
+
+```
+1. Replace draft questions → questions/README.md
+       ↓
+2. Pre-register            → preregistration/prereg-draft.md → archive on OSF
+       ↓
+3. Collect waves           → collection/collect.py --api (or --import-manual)
+       ↓
+4. Double-code + adjudicate → apply PROTOCOL.md D2–D6
+       ↓
+5. Reliability gate        → reliability/reliability.py (α ≥ 0.667 to proceed)
+       ↓
+6. Analyze                 → analysis/ars.py (Wilson CIs, duality) → analysis/glmm.R
+       ↓
+7. Publish + archive       → GitHub release → Zenodo DOI → cite
+```
+
+**Key rule:** ARS figures are not published unless the reliability gate passed for the classes they depend on (C4, C5). See [`analysis/README.md`](./analysis/README.md).
+
+---
+
 ## Repository structure
 
 ```
@@ -139,17 +163,38 @@ Recommendation-Economy-Pilot/
 ├── schema/
 │   ├── ars-record.schema.json       # Annotation record schema (with if/then constraints)
 │   └── response-record.schema.json  # Response record schema
+├── questions/
+│   ├── questions.schema.json        # MQC record schema
+│   ├── questions-draft.yaml         # 30 draft MQCs (replace before measurement)
+│   └── README.md                    # Registry governance
+├── collection/
+│   ├── collect.py                   # Wave runner (API + manual import modes)
+│   ├── wave-01.example.yaml         # Annotated wave config
+│   └── README.md                    # Collection docs + pre-reg ordering rule
+├── reliability/
+│   ├── reliability.py               # Cohen's kappa + Krippendorff's alpha (D7)
+│   └── README.md                    # Threshold table + Gold Standard onboarding
+├── analysis/
+│   ├── ars.py                       # ARS, Final Choice, volatility, Wilson CIs
+│   ├── glmm.R                       # Mixed-effects logistic regression
+│   └── README.md                    # Pipeline order + reliability gate rule
 ├── validation/
 │   ├── validate.py                  # Dataset validator (E1–E5, W1–W3)
 │   └── README.md                    # Validator documentation
+├── data/
+│   ├── README.md                    # Data dictionary + Zenodo procedure
+│   └── adjudications/               # Adjudication records (R-A.9, R-A.10)
+├── preregistration/
+│   └── prereg-draft.md              # OSF-ready pre-registration (archive before waves)
 ├── docs/
 │   ├── SUMMARY.md                   # One-page executive brief (AEO-optimized)
 │   ├── FAQ.md                       # Structured Q&A (schema.org FAQPage)
 │   └── CONCEPTS.md                  # Definitional glossary (entity extraction)
+├── .github/workflows/validate.yml   # CI: syntax-check + validate on push/PR
 ├── CITATION.cff                     # CFF 1.2 citation file
 ├── CHANGELOG.md                     # Versioned change log
-├── LICENSE                          # CC-BY-4.0 (protocol text)
-└── LICENSE-CODE                     # MIT (code: schemas, validator)
+├── LICENSE                          # CC-BY-4.0 (protocol text + data)
+└── LICENSE-CODE                     # MIT (code: schemas, validator, scripts)
 ```
 
 ---
@@ -175,7 +220,13 @@ All datasets are validated with `validation/validate.py` before release.
 | **Common questions** | [`docs/FAQ.md`](./docs/FAQ.md) — 9 structured Q&As with schema.org markup |
 | **Term definitions** | [`docs/CONCEPTS.md`](./docs/CONCEPTS.md) — glossary for citation and entity extraction |
 | **The full protocol** | [`PROTOCOL.md`](./PROTOCOL.md) — the normative document (D1–D11) |
+| **Question registry** | [`questions/README.md`](./questions/README.md) — MQC governance and replacement workflow |
+| **Running a wave** | [`collection/README.md`](./collection/README.md) — API/manual modes, failure semantics, pre-reg ordering |
+| **Reliability checks** | [`reliability/README.md`](./reliability/README.md) — D7 thresholds, Gold Standard onboarding |
+| **Analysis pipeline** | [`analysis/README.md`](./analysis/README.md) — ARS, GLMM, Wilson CIs, reliability gate |
 | **Validator usage** | [`validation/README.md`](./validation/README.md) — error/warning codes and exit codes |
+| **Data dictionary** | [`data/README.md`](./data/README.md) — file inventory, privacy, Zenodo procedure |
+| **Pre-registration** | [`preregistration/prereg-draft.md`](./preregistration/prereg-draft.md) — archive before waves |
 | **Version history** | [`CHANGELOG.md`](./CHANGELOG.md) — what changed in each release |
 
 ---

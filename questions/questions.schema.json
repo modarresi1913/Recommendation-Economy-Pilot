@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/modarresi1913/Recommendation-Economy-Pilot/main/questions/questions.schema.json",
+  "title": "ARS Market Question Cell (MQC) Record",
+  "description": "Schema for one Market Question Cell (MQC) in the ARS question registry. The `requirements` array is NORMATIVE: it lists the buyer's stated needs that the coding protocol references in R-C4.1b (recommendation must relate to the MQC scenario), R-C4.6 (conditional recommendation matching a stated need), and R-C4.7 (conditional recommendation not matching a stated need → conservative C3). A change to the `requirements` array or `question_text` is a new version (never a silent overwrite), mirroring the protocol freeze rule R-V.3.",
+  "type": "object",
+  "required": [
+    "question_id",
+    "version",
+    "status",
+    "category",
+    "language",
+    "requirements",
+    "question_text"
+  ],
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "pattern": "^(crm|pm|code)-q\\d{2}$",
+      "description": "Unique identifier. Pattern: {category}-q{NN}. Examples: crm-q01, pm-q07, code-q10."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of this question record. An edit to question_text or requirements is a new version (MINOR for wording refinement, MAJOR if requirements change)."
+    },
+    "status": {
+      "enum": ["draft", "active", "retired"],
+      "description": "draft = placeholder (replace before measurement); active = frozen and usable in waves; retired = no longer used (kept for provenance)."
+    },
+    "category": {
+      "enum": ["crm", "pm", "code"],
+      "description": "B2B software category: CRM, project management, AI coding assistants."
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$",
+      "description": "BCP-47 language tag of question_text. Default 'en'."
+    },
+    "geography": {
+      "type": ["string", "null"],
+      "description": "Target market geography (e.g., 'US', 'EU', 'global'). Nullable."
+    },
+    "buyer_type": {
+      "type": ["string", "null"],
+      "description": "Buyer persona (e.g., 'solo founder', 'IT manager', 'engineering lead'). Nullable."
+    },
+    "org_size": {
+      "type": ["string", "null"],
+      "description": "Target organization size (e.g., '1-10', '11-50', '200+'). Nullable."
+    },
+    "use_case": {
+      "type": ["string", "null"],
+      "description": "Primary use-case scenario for the question. Nullable."
+    },
+    "requirements": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "NORMATIVE: the buyer's stated needs. These are what 'matches the buyer's stated need' means in the coding protocol (R-C4.1b, R-C4.6, R-C4.7, R-C5.5 category-winner matching). Each entry should be a short, unambiguous need phrase. At least one required."
+    },
+    "decision_stage": {
+      "type": ["string", "null"],
+      "description": "Where the buyer is in the purchase journey (e.g., 'awareness', 'evaluation', 'decision'). Nullable."
+    },
+    "priorities": {
+      "type": ["array", "null"],
+      "items": { "type": "string" },
+      "description": "Ordered priorities (most to least important). Nullable. Distinct from requirements: priorities rank needs; requirements list them."
+    },
+    "budget": {
+      "type": ["string", "null"],
+      "description": "Budget context (e.g., 'free-tier only', '<$50/month', 'enterprise'). Nullable."
+    },
+    "question_text": {
+      "type": "string",
+      "minLength": 10,
+      "description": "The verbatim prompt text posed to AI platforms. This exact string is what responses are collected against."
+    },
+    "sampling_weight": {
+      "type": "number",
+      "default": 1.0,
+      "minimum": 0,
+      "description": "Weight for stratified sampling. Default 1.0 (equal weight)."
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 (UTC) creation timestamp."
+    },
+    "modified": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 (UTC) last-modification timestamp."
+    }
+  }
+}

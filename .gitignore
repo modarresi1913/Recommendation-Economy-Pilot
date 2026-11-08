@@ -16,12 +16,20 @@ venv/
 # Node (for LLM-coder tooling)
 node_modules/
 
-# Annotation outputs (keep schema, ignore raw data by default)
+# R
+.Rhistory
+.RData
+.Ruserdata
+
+# Data outputs (keep schemas, ignore raw data by default)
+# Schemas are explicitly tracked; data files are gitignored unless force-added.
 *.jsonl
 !schema/*.json
 data/_scratch/
 annotations/
-adjudications/
+
+# Collection failures (per-wave logs, not published)
+collection/failures-*.jsonl
 
 # Logs
 *.log

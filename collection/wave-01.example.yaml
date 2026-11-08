@@ -1,0 +1,68 @@
+# Wave 01 — Example Configuration
+#
+# This is an annotated example. Copy to wave-01.yaml (or wave-02.yaml, etc.)
+# and edit. API keys are NEVER set here — they come from environment variables.
+
+# Wave identifier (used in response_id format: w{wave}-{platform}-q{n}-r{run})
+wave: "01"
+
+# Path to the question registry (must contain 'active' questions).
+# Replace questions-draft.yaml with your questions-active.yaml before running.
+questions_path: "questions/questions-draft.yaml"
+
+# Platforms to collect from. Each must have corresponding environment variables:
+#   ARS_PLATFORM_<NAME>_BASE_URL
+#   ARS_PLATFORM_<NAME>_MODEL
+#   ARS_PLATFORM_<NAME>_API_KEY
+#   ARS_PLATFORM_<NAME>_MODEL_VERSION  (optional)
+# where <NAME> is the platform name uppercased with non-alphanumerics replaced by _.
+platforms:
+  - openai
+  - anthropic
+  - google
+  - perplexity
+  - mistral
+
+# Number of runs per question per platform (R in the protocol).
+# 10 runs x 30 questions x 5 platforms = 1500 responses per wave.
+runs_per_question: 10
+
+# Inter-run delay range in seconds (randomized jitter to avoid rate limits).
+delay_range_seconds: [1, 5]
+
+# Collection version (semantic version of the collection instrument, NOT the protocol).
+collection_version: "1.0.0"
+
+# Output path for collected responses.
+# (The wave runner also appends to this for idempotency.)
+# output: "data/responses.jsonl"  # default; uncomment to override
+
+# ── Platform-specific notes (for the operator, not parsed by the script) ──
+#
+# openai:
+#   ARS_PLATFORM_OPENAI_BASE_URL=https://api.openai.com
+#   ARS_PLATFORM_OPENAI_MODEL=gpt-4o
+#   ARS_PLATFORM_OPENAI_API_KEY=sk-...
+#
+# anthropic:  (OpenAI-compatible endpoint if available; else use --import-manual)
+#   ARS_PLATFORM_ANTHROPIC_BASE_URL=https://api.anthropic.com
+#   ARS_PLATFORM_ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
+#   ARS_PLATFORM_ANTHROPIC_API_KEY=sk-ant-...
+#
+# google:  (Gemini API; use OpenAI-compatible endpoint)
+#   ARS_PLATFORM_GOOGLE_BASE_URL=https://generativelanguage.googleapis.com
+#   ARS_PLATFORM_GOOGLE_MODEL=gemini-1.5-pro
+#   ARS_PLATFORM_GOOGLE_API_KEY=AIza...
+#
+# perplexity:
+#   ARS_PLATFORM_PERPLEXITY_BASE_URL=https://api.perplexity.ai
+#   ARS_PLATFORM_PERPLEXITY_MODEL=llama-3.1-sonar-large-128k-online
+#   ARS_PLATFORM_PERPLEXITY_API_KEY=pplx-...
+#
+# mistral:
+#   ARS_PLATFORM_MISTRAL_BASE_URL=https://api.mistral.ai
+#   ARS_PLATFORM_MISTRAL_MODEL=mistral-large-latest
+#   ARS_PLATFORM_MISTRAL_API_KEY=...
+#
+# For platforms without usable APIs, use --import-manual with a directory of
+# CSV or TXT transcripts (see collection/README.md).

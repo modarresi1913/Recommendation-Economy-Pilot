@@ -1,0 +1,707 @@
+# ARS Question Registry — Draft Market Question Cells
+#
+# These 30 MQCs are PLACEHOLDERS (status: draft). The owner must replace them
+# with the actual 30 pilot questions before any wave begins. See questions/README.md
+# for the replacement workflow.
+#
+# Each record conforms to questions/questions.schema.json.
+# The `requirements` array is normative: it defines what "matches the buyer's
+# stated need" means for coding rules R-C4.1b, R-C4.6, R-C4.7, R-C5.5.
+
+- question_id: crm-q01
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: solo founder
+  org_size: "1-10"
+  use_case: first CRM for a new startup
+  requirements:
+    - simplicity and fast adoption
+    - affordable pricing
+    - contact management
+  decision_stage: awareness
+  priorities:
+    - ease of use
+    - price
+  budget: free-tier or low-cost
+  question_text: "I'm a solo founder just starting out and need my first CRM. It should be simple to set up, affordable, and handle basic contact management. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q02
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: marketing lead
+  org_size: "11-50"
+  use_case: CRM with strong marketing automation
+  requirements:
+    - marketing automation
+    - email campaign integration
+    - lead scoring
+  decision_stage: evaluation
+  priorities:
+    - marketing automation
+    - integration
+  budget: mid-range
+  question_text: "I run marketing at a 30-person company and need a CRM with strong marketing automation — email campaigns, lead scoring, and nurture flows. What's the best option?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q03
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: IT manager
+  org_size: "200+"
+  use_case: enterprise CRM with compliance
+  requirements:
+    - enterprise-grade security
+    - regulatory compliance
+    - SSO and audit logs
+  decision_stage: decision
+  priorities:
+    - compliance
+    - security
+  budget: enterprise
+  question_text: "Our 500-person company needs an enterprise CRM that meets SOC 2 and HIPAA requirements, with SSO and full audit logging. What should we choose?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q04
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: sales manager
+  org_size: "11-50"
+  use_case: sales pipeline visualization
+  requirements:
+    - visual pipeline management
+    - deal tracking
+    - reporting
+  decision_stage: evaluation
+  priorities:
+    - pipeline visualization
+    - reporting
+  budget: mid-range
+  question_text: "I'm a sales manager at a 40-person company looking for a CRM with great visual pipeline management and deal tracking. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q05
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: operations lead
+  org_size: "11-50"
+  use_case: CRM with strong integrations
+  requirements:
+    - extensive third-party integrations
+    - API access
+    - Zapier or workflow automation
+  decision_stage: evaluation
+  priorities:
+    - integrations
+    - API
+  budget: mid-range
+  question_text: "We need a CRM that integrates well with our existing stack — Slack, QuickBooks, and custom internal tools via API. What works best for integration-heavy setups?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q06
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: small business owner
+  org_size: "1-10"
+  use_case: free CRM tier
+  requirements:
+    - free tier
+    - no credit card required
+    - core contact management
+  decision_stage: awareness
+  priorities:
+    - free
+    - ease of adoption
+  budget: free-tier only
+  question_text: "I run a small 3-person business and want a CRM with a genuinely free tier — no credit card, no time limit. What are my best options?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q07
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: customer success manager
+  org_size: "51-200"
+  use_case: CRM for customer success
+  requirements:
+    - customer health scoring
+    - retention workflows
+    - ticketing integration
+  decision_stage: evaluation
+  priorities:
+    - customer success features
+    - retention
+  budget: mid-range to enterprise
+  question_text: "I lead customer success at a 150-person SaaS company. I need a CRM that supports health scoring, retention workflows, and integrates with our support ticketing. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q08
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: founder
+  org_size: "1-10"
+  use_case: CRM for real estate
+  requirements:
+    - real estate specific features
+    - property tracking
+    - client communication
+  decision_stage: awareness
+  priorities:
+    - real estate features
+    - ease of use
+  budget: low to mid-range
+  question_text: "I'm starting a real estate agency and need a CRM suited to property tracking and client communication. What's recommended for real estate?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q09
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: RevOps lead
+  org_size: "51-200"
+  use_case: CRM for multi-team alignment
+  requirements:
+    - cross-team collaboration
+    - custom objects
+    - advanced permissions
+  decision_stage: decision
+  priorities:
+    - multi-team
+    - customization
+  budget: enterprise
+  question_text: "Our 200-person company needs a CRM that aligns sales, marketing, and customer success teams — with custom objects and granular permissions. What should we pick?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: crm-q10
+  version: 0.1.0
+  status: draft
+  category: crm
+  language: en
+  geography: global
+  buyer_type: nonprofit administrator
+  org_size: "1-10"
+  use_case: CRM for nonprofit
+  requirements:
+    - nonprofit pricing
+    - donor management
+    - volunteer tracking
+  decision_stage: awareness
+  priorities:
+    - nonprofit discount
+    - donor management
+  budget: free or discounted
+  question_text: "I run a small nonprofit and need a CRM for donor management and volunteer tracking. We need affordable or discounted pricing. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+# ── Project Management (10) ──
+
+- question_id: pm-q01
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: design team lead
+  org_size: "1-10"
+  use_case: PM tool for creative team
+  requirements:
+    - visual boards
+    - creative workflow templates
+    - easy collaboration
+  decision_stage: awareness
+  priorities:
+    - visual
+    - collaboration
+  budget: free or low-cost
+  question_text: "I lead a 5-person creative team and want a project management tool with visual boards and good collaboration. What's best for creative teams?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q02
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: engineering manager
+  org_size: "51-200"
+  use_case: PM for engineering team
+  requirements:
+    - agile/scrum support
+    - sprint planning
+    - developer integrations (GitHub, GitLab)
+  decision_stage: evaluation
+  priorities:
+    - agile
+    - developer integrations
+  budget: mid-range
+  question_text: "I manage a 30-person engineering team and need a PM tool that supports scrum, sprint planning, and integrates with GitHub. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q03
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: solo consultant
+  org_size: "1-10"
+  use_case: simple personal PM
+  requirements:
+    - simplicity
+    - free tier
+    - task lists
+  decision_stage: awareness
+  priorities:
+    - simplicity
+    - free
+  budget: free-tier only
+  question_text: "I'm a solo consultant looking for a simple, free project management tool — just task lists and basic deadlines. What should I use?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q04
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: program manager
+  org_size: "200+"
+  use_case: PM for cross-functional programs
+  requirements:
+    - portfolio management
+    - resource allocation
+    - Gantt charts
+    - reporting
+  decision_stage: decision
+  priorities:
+    - portfolio management
+    - reporting
+  budget: enterprise
+  question_text: "I run cross-functional programs at a 500-person company. I need portfolio management, resource allocation, and Gantt charts. What's the best enterprise PM tool?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q05
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: hybrid team lead
+  org_size: "11-50"
+  use_case: PM for hybrid/remote team
+  requirements:
+    - real-time collaboration
+    - async communication
+    - time zone friendly
+  decision_stage: evaluation
+  priorities:
+    - collaboration
+    - async
+  budget: mid-range
+  question_text: "Our 40-person team is fully remote across 4 time zones. We need a PM tool that supports both real-time and async collaboration well. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q06
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: product manager
+  org_size: "11-50"
+  use_case: PM with roadmapping
+  requirements:
+    - product roadmapping
+    - feature tracking
+    - customer feedback integration
+  decision_stage: evaluation
+  priorities:
+    - roadmapping
+    - feature tracking
+  budget: mid-range
+  question_text: "I'm a product manager at a 50-person SaaS company. I need a PM tool with strong roadmapping and feature tracking, ideally with customer feedback integration. What's best?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q07
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: operations manager
+  org_size: "51-200"
+  use_case: PM with automation
+  requirements:
+    - workflow automation
+    - custom rules
+    - integrations
+  decision_stage: evaluation
+  priorities:
+    - automation
+    - integrations
+  budget: mid-range
+  question_text: "I need a project management tool with strong workflow automation — custom rules, triggers, and integrations with our CRM and Slack. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q08
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: agency owner
+  org_size: "11-50"
+  use_case: PM for client work
+  requirements:
+    - client portals
+    - time tracking
+    - invoicing
+  decision_stage: evaluation
+  priorities:
+    - client portals
+    - time tracking
+  budget: mid-range
+  question_text: "I run a 20-person agency. We need a PM tool with client portals, time tracking, and invoicing for client work. What's recommended for agencies?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q09
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: construction PM
+  org_size: "51-200"
+  use_case: PM for construction
+  requirements:
+    - construction-specific features
+    - document management
+    - field team mobile access
+  decision_stage: evaluation
+  priorities:
+    - construction features
+    - mobile
+  budget: mid-range to enterprise
+  question_text: "I manage construction projects at a 100-person firm. I need a PM tool with document management and strong mobile access for field teams. What's best for construction?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: pm-q10
+  version: 0.1.0
+  status: draft
+  category: pm
+  language: en
+  geography: global
+  buyer_type: startup founder
+  org_size: "1-10"
+  use_case: all-in-one PM + docs
+  requirements:
+    - project management
+    - documentation
+    - knowledge base
+    - free tier
+  decision_stage: awareness
+  priorities:
+    - all-in-one
+    - free
+  budget: free-tier only
+  question_text: "Our 5-person startup wants an all-in-one tool that combines project management, docs, and a knowledge base — ideally with a generous free tier. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+# ── AI Coding Assistants (10) ──
+
+- question_id: code-q01
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: Python developer
+  org_size: "1-10"
+  use_case: AI coding assistant for Python
+  requirements:
+    - strong Python support
+    - inline completions
+    - free or affordable
+  decision_stage: awareness
+  priorities:
+    - Python
+    - price
+  budget: free or low-cost
+  question_text: "I'm a Python developer working solo. I want an AI coding assistant with strong Python support and inline completions, preferably free or affordable. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q02
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: engineering lead
+  org_size: "51-200"
+  use_case: team AI coding assistant
+  requirements:
+    - team collaboration features
+    - admin controls
+    - multi-language support
+    - enterprise security
+  decision_stage: decision
+  priorities:
+    - team features
+    - security
+  budget: enterprise
+  question_text: "I lead engineering at a 100-person company. We want an AI coding assistant for the whole team — with admin controls, multi-language support, and enterprise security. What should we choose?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q03
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: full-stack developer
+  org_size: "11-50"
+  use_case: AI assistant for TypeScript/React
+  requirements:
+    - TypeScript/React support
+    - chat and inline completions
+    - IDE integration
+  decision_stage: evaluation
+  priorities:
+    - TypeScript
+    - IDE integration
+  budget: mid-range
+  question_text: "I'm a full-stack developer working mostly in TypeScript and React. I want an AI assistant that excels at both, with good IDE integration. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q04
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: solo developer
+  org_size: "1-10"
+  use_case: privacy-focused AI coding
+  requirements:
+    - local/offline mode
+    - no code sent to cloud
+    - privacy
+  decision_stage: evaluation
+  priorities:
+    - privacy
+    - local
+  budget: low-cost
+  question_text: "I'm a solo developer who values privacy. I want an AI coding assistant that can run locally or offline without sending my code to the cloud. What are my options?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q05
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: DevOps engineer
+  org_size: "51-200"
+  use_case: AI for infrastructure code
+  requirements:
+    - Terraform/Ansible support
+    - shell scripting
+    - infrastructure-as-code
+  decision_stage: evaluation
+  priorities:
+    - infrastructure languages
+    - IaC
+  budget: mid-range
+  question_text: "I'm a DevOps engineer working with Terraform, Ansible, and shell scripts. I want an AI assistant that handles infrastructure-as-code well. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q06
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: data scientist
+  org_size: "11-50"
+  use_case: AI for Jupyter notebooks
+  requirements:
+    - Jupyter integration
+    - Python/R support
+    - data science libraries
+  decision_stage: evaluation
+  priorities:
+    - Jupyter
+    - data science
+  budget: mid-range
+  question_text: "I'm a data scientist who works in Jupyter notebooks with Python and R. I want an AI assistant that integrates well with notebooks and understands data science libraries. What's best?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q07
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: mobile developer
+  org_size: "1-10"
+  use_case: AI for Swift/Kotlin
+  requirements:
+    - Swift support
+    - Kotlin support
+    - mobile dev context
+  decision_stage: evaluation
+  priorities:
+    - Swift/Kotlin
+    - mobile
+  budget: mid-range
+  question_text: "I build mobile apps in Swift and Kotlin. I want an AI coding assistant that's strong in both languages and understands mobile development context. What do you recommend?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q08
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: open-source maintainer
+  org_size: "1-10"
+  use_case: AI for large codebase refactoring
+  requirements:
+    - large context window
+    - refactoring capability
+    - multi-file understanding
+  decision_stage: evaluation
+  priorities:
+    - large context
+    - refactoring
+  budget: mid-range
+  question_text: "I maintain a large open-source codebase. I want an AI assistant that can handle large context windows and help with multi-file refactoring. What's the best option?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q09
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: student
+  org_size: "1-10"
+  use_case: free AI coding assistant for learning
+  requirements:
+    - free tier
+    - beginner-friendly
+    - multiple languages
+  decision_stage: awareness
+  priorities:
+    - free
+    - beginner-friendly
+  budget: free-tier only
+  question_text: "I'm a computer science student learning to code. I want a free, beginner-friendly AI coding assistant that supports multiple languages. What should I use?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
+
+- question_id: code-q10
+  version: 0.1.0
+  status: draft
+  category: code
+  language: en
+  geography: global
+  buyer_type: CTO
+  org_size: "200+"
+  use_case: enterprise AI coding rollout
+  requirements:
+    - enterprise security
+    - audit logging
+    - SSO
+    - usage analytics
+  decision_stage: decision
+  priorities:
+    - security
+    - analytics
+  budget: enterprise
+  question_text: "As CTO of a 300-person company, I'm rolling out an AI coding assistant to all engineers. I need enterprise security, SSO, audit logging, and usage analytics. What should we choose?"
+  sampling_weight: 1.0
+  created: "2026-11-08T00:00:00Z"
+  modified: "2026-11-08T00:00:00Z"
