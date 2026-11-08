@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.org/ars-coding-protocol/schema/ars-record.schema.json",
+  "$id": "https://raw.githubusercontent.com/modarresi1913/Recommendation-Economy-Pilot/main/schema/ars-record.schema.json",
   "title": "ARS Coding Record",
-  "description": "JSONL record schema for one brand-response event in the AI Recommendation Share (ARS) study. One object per line; one object per brand-response event. See PROTOCOL.md (D10) for full field definitions and recording rules.",
+  "description": "JSONL record schema for one brand-response event in the AI Recommendation Share (ARS) study. One object per line; one object per brand-response event. See PROTOCOL.md (D10) for full field definitions and recording rules. Conditional constraints are enforced via allOf/if/then keyed on class_code (see D10 section 10.3a).",
   "type": "object",
   "required": [
     "response_id",
@@ -26,7 +26,7 @@
   "properties": {
     "response_id": {
       "type": "string",
-      "description": "Unique identifier for the AI response (one per response)."
+      "description": "Unique identifier for the AI response (one per response). Must exist in data/responses.jsonl."
     },
     "question_id": {
       "type": "string",
@@ -46,27 +46,27 @@
     },
     "subtype": {
       "enum": ["explicit", "implicit", null],
-      "description": "Recorded for C4 and C5 only. For C5, always 'explicit' (R-F.1a). For C1/C2/C3/C6, null."
+      "description": "Recorded for C4 and C5 only (R-F.1). For C5, always 'explicit' (R-F.1a). For C1/C2/C3/C6/ADJUDICATE, null (R-F.6)."
     },
     "strength": {
       "type": ["integer", "null"],
       "minimum": 1,
       "maximum": 5,
-      "description": "Ordinal recommendation force. 5=C5 rank1; 4=C5 rank2; 3=C5 rank>=3; 2=C4 explicit; 1=C4 implicit. null for C1/C2/C3/C6. See R-F.4."
+      "description": "Ordinal recommendation force per R-F.4. 5=C5 rank1 overall; 4=C5 rank2 overall; 3=C5 rank>=3 or category winner (R-F.7); 2=C4 explicit; 1=C4 implicit. null for C1/C2/C3/C6/ADJUDICATE (R-F.6)."
     },
     "final_choice": {
       "type": ["boolean", "null"],
-      "description": "true for the single winning brand; false for others; null for all when no winner (R-FC.3, R-FC.4). Response-level consistency per R-FC.5."
+      "description": "true for the single winning brand; false for others; null for all when no winner (R-FC.3, R-FC.4). Response-level consistency per R-FC.5 (enforced by validation/validate.py E2). null for ADJUDICATE events (R-F.6)."
     },
     "evidence_span": {
       "type": "string",
       "minLength": 1,
-      "description": "Verbatim substring of the response supporting the code (R-F.8). No paraphrase."
+      "description": "Verbatim substring of the response supporting the code (R-F.8). No paraphrase. Must be a substring of the response's full_text (enforced by validation/validate.py E4)."
     },
     "rank_position": {
       "type": ["integer", "null"],
       "minimum": 1,
-      "description": "Integer >=1 for C5 only; null otherwise (R-F.11)."
+      "description": "Integer >=1 for C5 only (R-F.11); null otherwise. Category winners record rank_position=1 within their category (R-F.13)."
     },
     "sponsored": {
       "type": "boolean",
@@ -74,11 +74,11 @@
     },
     "platform_self_id": {
       "type": "boolean",
-      "description": "true if the brand is the AI platform generating the response (or same vendor) and the response discloses it (R-F.14). Does not alter classification."
+      "description": "true if the brand being classified IS the AI platform (or same-vendor product) and the response discloses it (R-F.14). Response-level disclosures naming no classified brand go in the response record's self_disclosure object instead."
     },
     "rationale": {
       "type": "string",
-      "description": "Cites rule IDs (e.g., 'R-C4.3'); notes secondary evidence spans and category names where applicable."
+      "description": "Cites rule IDs (e.g., 'R-C4.3'); notes secondary evidence spans and category names where applicable. For ADJUDICATE, must cite R-DP.9 and name candidate codes (R-F.6)."
     },
     "coder_id": {
       "type": "string",
@@ -95,7 +95,129 @@
     "protocol_version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "description": "Semantic version of the protocol under which the event was coded (D11)."
+      "description": "Semantic version of the coding protocol under which the event was coded (D11)."
     }
-  }
+  },
+  "allOf": [
+    {
+      "description": "C1/C2/C3/C6: subtype, strength, rank_position must be null (R-F.1, R-F.4, R-F.11).",
+      "if": {
+        "properties": { "class_code": { "enum": ["C1", "C2", "C3", "C6"] } },
+        "required": ["class_code"]
+      },
+      "then": {
+        "properties": {
+          "subtype": { "const": null },
+          "strength": { "const": null },
+          "rank_position": { "const": null }
+        }
+      }
+    },
+    {
+      "description": "C4: subtype must be explicit or implicit (R-F.1); strength exactly 2 if explicit, exactly 1 if implicit (R-F.4); rank_position must be null (R-F.11).",
+      "if": {
+        "properties": {
+          "class_code": { "const": "C4" },
+          "subtype": { "const": "explicit" }
+        },
+        "required": ["class_code", "subtype"]
+      },
+      "then": {
+        "properties": {
+          "strength": { "const": 2 },
+          "rank_position": { "const": null }
+        }
+      }
+    },
+    {
+      "description": "C4 implicit: strength exactly 1; rank_position null (R-F.4, R-F.11).",
+      "if": {
+        "properties": {
+          "class_code": { "const": "C4" },
+          "subtype": { "const": "implicit" }
+        },
+        "required": ["class_code", "subtype"]
+      },
+      "then": {
+        "properties": {
+          "strength": { "const": 1 },
+          "rank_position": { "const": null }
+        }
+      }
+    },
+    {
+      "description": "C5 rank 1: subtype must be explicit (R-F.1a); strength 5 for overall winner or 3 for category winner (R-F.4, R-F.7). The schema permits both because rank_position=1 alone cannot distinguish overall from category; the validator's W1 warning and rationale review disambiguate.",
+      "if": {
+        "properties": {
+          "class_code": { "const": "C5" },
+          "rank_position": { "const": 1 }
+        },
+        "required": ["class_code", "rank_position"]
+      },
+      "then": {
+        "properties": {
+          "subtype": { "const": "explicit" },
+          "strength": { "enum": [3, 5] }
+        }
+      }
+    },
+    {
+      "description": "C5 rank 2: subtype explicit (R-F.1a); strength exactly 4 (R-F.4).",
+      "if": {
+        "properties": {
+          "class_code": { "const": "C5" },
+          "rank_position": { "const": 2 }
+        },
+        "required": ["class_code", "rank_position"]
+      },
+      "then": {
+        "properties": {
+          "subtype": { "const": "explicit" },
+          "strength": { "const": 4 }
+        }
+      }
+    },
+    {
+      "description": "C5 rank >= 3: subtype explicit (R-F.1a); strength exactly 3 (R-F.4, R-F.7).",
+      "if": {
+        "properties": {
+          "class_code": { "const": "C5" },
+          "rank_position": { "type": "integer", "minimum": 3 }
+        },
+        "required": ["class_code", "rank_position"]
+      },
+      "then": {
+        "properties": {
+          "subtype": { "const": "explicit" },
+          "strength": { "const": 3 }
+        }
+      }
+    },
+    {
+      "description": "C5 with null rank_position: not permitted per R-F.11 (rank_position must be integer >= 1 for C5).",
+      "if": {
+        "properties": {
+          "class_code": { "const": "C5" },
+          "rank_position": { "type": "null" }
+        },
+        "required": ["class_code"]
+      },
+      "then": false
+    },
+    {
+      "description": "ADJUDICATE: subtype, strength, rank_position, final_choice must be null (R-F.6).",
+      "if": {
+        "properties": { "class_code": { "const": "ADJUDICATE" } },
+        "required": ["class_code"]
+      },
+      "then": {
+        "properties": {
+          "subtype": { "const": null },
+          "strength": { "const": null },
+          "rank_position": { "const": null },
+          "final_choice": { "const": null }
+        }
+      }
+    }
+  ]
 }

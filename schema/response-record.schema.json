@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/modarresi1913/Recommendation-Economy-Pilot/main/schema/response-record.schema.json",
+  "title": "ARS Response Record",
+  "description": "JSONL record schema for one AI-generated response in the AI Recommendation Share (ARS) study. One object per line in data/responses.jsonl. See PROTOCOL.md (D10, section 10.5) for full field definitions and recording rules.",
+  "type": "object",
+  "required": [
+    "response_id",
+    "question_id",
+    "platform",
+    "model_version",
+    "language",
+    "timestamp_collected",
+    "full_text",
+    "citations",
+    "sponsored_block_present",
+    "self_disclosure",
+    "collection_channel",
+    "collection_version"
+  ],
+  "properties": {
+    "response_id": {
+      "type": "string",
+      "description": "Unique identifier for the response; must match response_id in every annotation record for this response."
+    },
+    "question_id": {
+      "type": "string",
+      "description": "The Market Question Cell identifier; matches question_id in annotation records."
+    },
+    "platform": {
+      "type": "string",
+      "description": "The AI platform that produced the response."
+    },
+    "model_version": {
+      "type": ["string", "null"],
+      "description": "The platform's disclosed model identifier where available (e.g., gpt-4o-2024-08-06). null if not disclosed; validator emits W3 warning."
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$",
+      "description": "BCP-47 language tag; default 'en'."
+    },
+    "timestamp_collected": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 (UTC) timestamp of when the response was collected."
+    },
+    "full_text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The complete verbatim response text. evidence_span values in annotation records must be substrings of this field (R-F.8, enforced by validate.py E4)."
+    },
+    "citations": {
+      "type": "array",
+      "description": "URLs and titles cited in the response. Empty array if none.",
+      "items": {
+        "type": "object",
+        "required": ["url", "title"],
+        "properties": {
+          "url": { "type": "string", "minLength": 1 },
+          "title": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "sponsored_block_present": {
+      "type": "boolean",
+      "description": "true if the response contains any disclosed sponsored/promotional block. Per-event sponsored flags (R-F.15) identify which brand appearances fall inside such a block."
+    },
+    "self_disclosure": {
+      "type": "object",
+      "description": "Platform self-disclosure metadata (R-F.14). When the platform discloses its identity but names no classified brand, the disclosure is recorded here, not as a per-event flag.",
+      "required": ["present", "verbatim", "vendor"],
+      "properties": {
+        "present": { "type": "boolean" },
+        "verbatim": { "type": ["string", "null"] },
+        "vendor": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {
+          "description": "When present is false, verbatim and vendor must be null.",
+          "if": { "properties": { "present": { "const": false } }, "required": ["present"] },
+          "then": {
+            "properties": {
+              "verbatim": { "const": null },
+              "vendor": { "const": null }
+            }
+          }
+        },
+        {
+          "description": "When present is true, verbatim must be a non-empty string; vendor should be a string.",
+          "if": { "properties": { "present": { "const": true } }, "required": ["present"] },
+          "then": {
+            "properties": {
+              "verbatim": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "collection_channel": {
+      "enum": ["web", "api"],
+      "description": "How the response was collected: web UI or API."
+    },
+    "collection_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the collection instrument (distinct from protocol_version, which is the coding protocol)."
+    }
+  }
+}

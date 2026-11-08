@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this protocol or its schemas in your research, please cite as below."
+title: "AI Recommendation Share — Public Coding Protocol"
+version: "1.1.0"
+type: software
+authors:
+  - given-names: "Seyed Alireza Alhosseini"
+    family-names: "Almodarresieh"
+    # orcid: "0000-0000-0000-0000"  # TODO: owner to fill ORCID iD
+    # email: "owner@example.org"     # TODO: owner to fill email
+repository-code: "https://github.com/modarresi1913/Recommendation-Economy-Pilot"
+license: "CC-BY-4.0"
+keywords:
+  - llm
+  - measurement
+  - content-analysis
+  - ai-visibility
+  - recommendation-systems
+date-released: "2026-11-08"
+preferred-citation:
+  type: software
+  title: "AI Recommendation Share — Public Coding Protocol"
+  version: "1.1.0"
+  authors:
+    - given-names: "Seyed Alireza Alhosseini"
+      family-names: "Almodarresieh"
+  repository-code: "https://github.com/modarresi1913/Recommendation-Economy-Pilot"
+  license: "CC-BY-4.0"
+  date-released: "2026-11-08"

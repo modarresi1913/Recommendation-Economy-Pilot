@@ -1,4 +1,4 @@
-# AI Recommendation Share — Public Coding Protocol v1.0
+# AI Recommendation Share — Public Coding Protocol v1.1
 
 ---
 
@@ -7,7 +7,7 @@
 | Field | Value |
 |---|---|
 | Document title | AI Recommendation Share — Public Coding Protocol |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Status | Active — frozen for measurement |
 | Intended users | Human coders, LLM-coder operators, adjudicators, and principal investigators conducting AI Recommendation Share (ARS) measurement |
 | Unit of analysis | The **brand–response event**: one brand × one AI response. A single response that names *n* distinct brands yields up to *n* brand–response events. |
@@ -293,7 +293,7 @@ Code: C3. Rules: R-C4.8, R-C3.1. Rationale: "could work" is hedge language; the 
 **E22 [Borderline] — ranked recommendation with multiple categories.**
 Context: buyer needs a CRM balancing budget and marketing automation.
 Excerpt: *"Best for budget: Pipedrive. Best for marketing automation: HubSpot. Best overall for your mixed needs: HubSpot."*
-Codes: Pipedrive = C5, rank_position 1 (category: budget), strength 5 (R-C5.5); HubSpot = C5, rank_position 1 (category: marketing automation) and rank_position 1 (overall), strength 5 (R-C5.5). Final choice: HubSpot (overall winner). Rationale: multiple category winners each get C5 rank 1 in their category; the explicit "best overall" designates the final choice.
+Codes: Pipedrive = C5, rank_position 1 (category: budget), strength 3 (R-C5.5, R-F.7 — category winner, not overall); HubSpot = C5, rank_position 1 (overall), strength 5 (R-C5.5, R-F.4). Final choice: HubSpot (overall winner). Rationale: Pipedrive is a category winner matching a stated need (budget) but is not the overall winner, so strength 3 per R-F.7; HubSpot is the overall winner, so strength 5 and final_choice = true.
 
 **E23 [Borderline] — brand only in a URL → C1.**
 Context: buyer asks about AI coding assistants.
@@ -329,14 +329,16 @@ For every brand–response event, the following fields are captured in addition 
 
 | strength | class_code | subtype | rank_position |
 |---|---|---|---|
-| 5 | C5 | (explicit by definition) | 1 |
-| 4 | C5 | (explicit by definition) | 2 |
-| 3 | C5 | (explicit by definition) | ≥ 3 |
+| 5 | C5 | (explicit by definition) | 1 (overall) |
+| 4 | C5 | (explicit by definition) | 2 (overall) |
+| 3 | C5 | (explicit by definition) | ≥ 3, **or category winner (R-F.7)** |
 | 2 | C4 | explicit | — |
 | 1 | C4 | implicit | — |
-| null | C1, C2, C3, C6 | — | — |
+| null | C1, C2, C3, C6, ADJUDICATE | — | — |
 
-- **R-F.5:** `strength` is derived from `class_code`, `subtype`, and `rank_position` but is captured explicitly to support downstream analysis without re-derivation. Note: strength 3 covers all C5 events with `rank_position ≥ 3`; analyses requiring finer rank granularity use `rank_position` directly, which is retained as a separate field.
+- **R-F.5:** `strength` is derived from `class_code`, `subtype`, and `rank_position` but is captured explicitly to support downstream analysis without re-derivation. Note: strength 3 covers all C5 events with `rank_position ≥ 3` and C5 category winners per R-F.7; analyses requiring finer rank granularity use `rank_position` directly, which is retained as a separate field.
+- **R-F.6 (ADJUDICATE event field values):** For events with `class_code = "ADJUDICATE"`: `subtype = null`, `strength = null`, `rank_position = null`, and `final_choice = null`. The `evidence_span` must quote the ambiguous passage verbatim. The `rationale` must cite R-DP.9 and name the candidate codes considered (e.g., "candidate codes: C3, C4"). No other field values are permitted for ADJUDICATE events.
+- **R-F.7 (Category-winner strength):** For C5 category winners under R-C5.5 whose category matches a stated buyer need but who are **not** the overall winner: record `rank_position = 1` (within category, per R-F.13) and `strength = 3`. Strength 4–5 is reserved for overall ordered preferences (rank 1 and rank 2 respectively). This prevents category winners from inflating "strongest recommendation" analyses (see KA-13).
 
 ### 5.3 Final Choice determination
 
@@ -366,7 +368,7 @@ For every brand–response event, the following fields are captured in addition 
 
 ### 5.6 Platform self-identification and sponsorship metadata
 
-- **R-F.14 (`platform_self_id`):** Boolean. `true` when the brand being classified is the AI platform generating the response (or a product of the same vendor) and the response discloses this. The disclosure text is recorded in `rationale`. The flag does not alter classification.
+- **R-F.14 (`platform_self_id`):** Boolean, per-event. `true` when the brand being classified **is** the AI platform generating the response (or a product of the same vendor) and the response discloses this identity. The flag does not alter classification. When a platform self-discloses but names no classified brand (e.g., "I'm an AI assistant made by OpenAI" in a response that only classifies third-party brands), the per-event flag has no event to attach to; in that case the disclosure is recorded at the **response level** in the `self_disclosure` object of the response record (see §10.5), not as a per-event flag. The disclosure text is recorded in `rationale` (per-event) or in `self_disclosure.verbatim` (response-level).
 - **R-F.15 (`sponsored`):** Boolean. `true` when the brand appearance occurs inside a disclosed sponsored/promotional block. The block delimiter text is recorded in `rationale`. The flag does not alter classification.
 - **R-F.16:** Both flags support secondary analyses that include or exclude these events. ARS headline figures must report both an inclusive and an exclusive count when either flag is present in the dataset.
 
@@ -528,7 +530,7 @@ Ten items. Each coder completes the quiz before coding live data; a coder must s
 **Answer:** Tabnine = C3 (R-C3.1, R-C3.5); Codeium = C4, subtype implicit, strength 1 (R-C4.3). Final choice: Codeium. Explanation: Tabnine is praised ("decent") but not recommended; Codeium reaches a comparative conclusion for the buyer's stated need.
 
 **Q10.** Context: response generated by an OpenAI model; buyer asks about AI coding assistants. Excerpt: *"I'm an AI assistant made by OpenAI. For coding, GitHub Copilot and Tabnine are both popular."* Classify GitHub Copilot and Tabnine.
-**Answer:** GitHub Copilot = C2 (R-C2.1, R-C2.3); Tabnine = C2 (R-C2.1, R-C2.3). The OpenAI self-identification is recorded as `platform_self_id = true` metadata for OpenAI but does not change the classification of the named brands. Explanation: neutral list of alternatives; self-identification is metadata only (R-DP.2).
+**Answer:** GitHub Copilot = C2 (R-C2.1, R-C2.3); Tabnine = C2 (R-C2.1, R-C2.3). The OpenAI self-identification does not attach a per-event `platform_self_id` flag because OpenAI is not a classified brand in this response (no OpenAI brand–response event exists). Instead, the disclosure is recorded at the response level in the `self_disclosure` object (`present = true`, `verbatim = "I'm an AI assistant made by OpenAI"`, `vendor = "OpenAI"`) per R-F.14 and §10.5. Explanation: neutral list of alternatives; self-identification is metadata only (R-DP.2) and does not change the classification of the named brands.
 
 ---
 
@@ -562,9 +564,12 @@ One JSON object per line, one object per brand–response event. All events from
 
 ### 10.3 JSON Schema (draft 2020-12)
 
+The authoritative machine-validatable schema is [`schema/ars-record.schema.json`](./schema/ars-record.schema.json). The base field definitions are reproduced below for reference. The standalone file additionally enforces the conditional constraints listed in §10.3a via `if`/`then` blocks keyed on `class_code`.
+
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/modarresi1913/Recommendation-Economy-Pilot/main/schema/ars-record.schema.json",
   "title": "ARS Coding Record",
   "type": "object",
   "required": ["response_id","question_id","platform","brand","class_code",
@@ -593,6 +598,19 @@ One JSON object per line, one object per brand–response event. All events from
 }
 ```
 
+### 10.3a Conditional constraints enforced by the schema
+
+The standalone schema file wraps the base properties above in `allOf` with one `if`/`then` block per value of `class_code`. These constraints are normative and correspond to the cited rules:
+
+| class_code | subtype | strength | rank_position | Governing rules |
+|---|---|---|---|---|
+| C1, C2, C3, C6 | must be `null` | must be `null` | must be `null` | R-F.1, R-F.4, R-F.11 |
+| C4 | must be `explicit` or `implicit` | exactly 2 if explicit; exactly 1 if implicit | must be `null` | R-F.1, R-F.4, R-F.11 |
+| C5 | must be `explicit` | 5 if rank_position = 1 (overall); 3 if rank_position = 1 (category winner, R-F.7); 4 if = 2; 3 if ≥ 3 | integer ≥ 1 | R-F.1a, R-F.4, R-F.7, R-F.11 |
+| ADJUDICATE | must be `null` | must be `null` | must be `null` | R-F.6 |
+
+A record that violates any of these constraints fails schema validation with a machine-readable error identifying the failing `if`/`then` branch.
+
 ### 10.4 Example record
 
 ```json
@@ -613,9 +631,28 @@ One JSON object per line, one object per brand–response event. All events from
   "coder_id": "human-coder-04",
   "coder_type": "human",
   "timestamp": "2026-11-08T09:14:00Z",
-  "protocol_version": "1.0.0"
+  "protocol_version": "1.1.0"
 }
 ```
+
+### 10.5 Response record schema
+
+Responses (the AI-generated texts that coders classify) are recorded in `data/responses.jsonl`, one JSON object per line, conforming to [`schema/response-record.schema.json`](./schema/response-record.schema.json). The fields are:
+
+| Field | Type | Required | Recording rule |
+|---|---|---|---|
+| `response_id` | string | yes | Unique identifier for the response; must match `response_id` in every annotation record for this response. |
+| `question_id` | string | yes | The Market Question Cell identifier; matches `question_id` in annotation records. |
+| `platform` | string | yes | The AI platform that produced the response. |
+| `model_version` | string\|null | yes | The platform's disclosed model identifier where available (e.g., `gpt-4o-2024-08-06`, `claude-3-5-sonnet-20241022`). If the platform does not disclose a model identifier, record `null`; the validator emits W3 (see `validation/README.md`). |
+| `language` | string (BCP-47) | yes | The response language; default `"en"`. |
+| `timestamp_collected` | string (ISO 8601 UTC) | yes | When the response was collected. |
+| `full_text` | string (minLength 1) | yes | The complete verbatim response text. This is the text from which `evidence_span` substrings are drawn (R-F.8). No truncation, no paraphrase. |
+| `citations` | array of `{url, title}` | yes | URLs and titles cited in the response. `title` may be `null` if the response gives only a URL. Empty array if none. |
+| `sponsored_block_present` | boolean | yes | `true` if the response contains any disclosed sponsored/promotional block. Per-event `sponsored` flags (R-F.15) identify which brand appearances fall inside such a block. |
+| `self_disclosure` | object | yes | Platform self-disclosure metadata (per R-F.14, DF-5). Shape: `{"present": boolean, "verbatim": string\|null, "vendor": string\|null}`. `present = true` when the response discloses its own identity or vendor. `verbatim` is the disclosure text. `vendor` is the named vendor (e.g., `"OpenAI"`, `"Anthropic"`). When `present = false`, `verbatim` and `vendor` are `null`. |
+| `collection_channel` | enum: `web`, `api` | yes | How the response was collected — web UI or API. |
+| `collection_version` | string (semver) | yes | Semantic version of the collection instrument (the data-collection protocol, distinct from `protocol_version` which is the coding protocol). |
 
 ---
 
@@ -701,3 +738,4 @@ Each entry lists the unresolved judgment call and the conservative default chose
 | KA-10 | Brand mentioned only in a code block or configuration example. | C1 unless accompanied by evaluative commentary. | R-C1.3 |
 | KA-11 | Brand alias or acronym resolution when the canonical identity is uncertain. | Record the literal token in `evidence_span`; use the most plausible canonical name in `brand`; flag uncertainty in `rationale`. Adjudicate if identity changes the code. | R-DP.1 |
 | KA-12 | "Best overall" coexisting with multiple category winners. | The overall winner is the Final Choice (R-FC.2); category winners remain C5 rank 1 within their category only if the category matches a stated need (R-C5.5). | R-C5.5, R-FC.2 |
+| KA-13 | Category winners ("best for X") and overall winners share strength 5 under the original R-F.4 mapping, inflating "strongest recommendation" analyses. | Category winners matching a stated need take strength 3 per R-F.7; only overall ordered preferences take strength 4–5. | R-C5.5, R-F.7 |

@@ -19,6 +19,7 @@ node_modules/
 # Annotation outputs (keep schema, ignore raw data by default)
 *.jsonl
 !schema/*.json
+data/_scratch/
 annotations/
 adjudications/
 
