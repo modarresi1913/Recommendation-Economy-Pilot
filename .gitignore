@@ -1,0 +1,26 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python (for validation / analysis scripts coders may add)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Node (for LLM-coder tooling)
+node_modules/
+
+# Annotation outputs (keep schema, ignore raw data by default)
+*.jsonl
+!schema/*.json
+annotations/
+adjudications/
+
+# Logs
+*.log

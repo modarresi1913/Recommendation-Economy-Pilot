@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/ars-coding-protocol/schema/ars-record.schema.json",
+  "title": "ARS Coding Record",
+  "description": "JSONL record schema for one brand-response event in the AI Recommendation Share (ARS) study. One object per line; one object per brand-response event. See PROTOCOL.md (D10) for full field definitions and recording rules.",
+  "type": "object",
+  "required": [
+    "response_id",
+    "question_id",
+    "platform",
+    "brand",
+    "class_code",
+    "subtype",
+    "strength",
+    "final_choice",
+    "evidence_span",
+    "rank_position",
+    "sponsored",
+    "platform_self_id",
+    "rationale",
+    "coder_id",
+    "coder_type",
+    "timestamp",
+    "protocol_version"
+  ],
+  "properties": {
+    "response_id": {
+      "type": "string",
+      "description": "Unique identifier for the AI response (one per response)."
+    },
+    "question_id": {
+      "type": "string",
+      "description": "Unique identifier for the Market Question Cell (buyer-intent question + stated needs)."
+    },
+    "platform": {
+      "type": "string",
+      "description": "The AI platform that produced the response."
+    },
+    "brand": {
+      "type": "string",
+      "description": "Canonical brand name; aliases and acronyms resolved per R-DP.1."
+    },
+    "class_code": {
+      "enum": ["C1", "C2", "C3", "C4", "C5", "C6", "ADJUDICATE"],
+      "description": "C1 Mention; C2 Neutral inclusion; C3 Positive consideration; C4 Qualified recommendation; C5 Ranked recommendation; C6 Rejection or warning; ADJUDICATE = no rule resolved, flagged per R-DP.9."
+    },
+    "subtype": {
+      "enum": ["explicit", "implicit", null],
+      "description": "Recorded for C4 and C5 only. For C5, always 'explicit' (R-F.1a). For C1/C2/C3/C6, null."
+    },
+    "strength": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Ordinal recommendation force. 5=C5 rank1; 4=C5 rank2; 3=C5 rank>=3; 2=C4 explicit; 1=C4 implicit. null for C1/C2/C3/C6. See R-F.4."
+    },
+    "final_choice": {
+      "type": ["boolean", "null"],
+      "description": "true for the single winning brand; false for others; null for all when no winner (R-FC.3, R-FC.4). Response-level consistency per R-FC.5."
+    },
+    "evidence_span": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Verbatim substring of the response supporting the code (R-F.8). No paraphrase."
+    },
+    "rank_position": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Integer >=1 for C5 only; null otherwise (R-F.11)."
+    },
+    "sponsored": {
+      "type": "boolean",
+      "description": "true if the appearance is inside a disclosed sponsored block (R-F.15). Does not alter classification."
+    },
+    "platform_self_id": {
+      "type": "boolean",
+      "description": "true if the brand is the AI platform generating the response (or same vendor) and the response discloses it (R-F.14). Does not alter classification."
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Cites rule IDs (e.g., 'R-C4.3'); notes secondary evidence spans and category names where applicable."
+    },
+    "coder_id": {
+      "type": "string",
+      "description": "Unique per coder. Humans prefixed 'human-', LLMs 'llm-' (R-L.4)."
+    },
+    "coder_type": {
+      "enum": ["human", "llm"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 (UTC)."
+    },
+    "protocol_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the protocol under which the event was coded (D11)."
+    }
+  }
+}
